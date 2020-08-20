@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../jquery-3.2.1.min.js"></script>
+
+
+</head>
+<body>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+    aliqua.
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</p>
+<script>
+    //ovie so nizata so se za da gi appened to body treba da gi vrteme u funkcija so .each
+    data = '[{"name":"color", "options": ["red", "green", "blue" ]},' +
+        '{"name":"width", "options":["100px", "200px", "600px"]},' +
+        '{"name":"width", "options":["100px", "200px", "600px","400px"]},' +
+        '{"name":"background-color", "options" : ["pink", "yellow", "black"]}]';
+
+    data = JSON.parse(data);
+    //console.log(data.length);-> 4 gi broe kolku {} ima
+    for (let i = 0; i < data.length; i++) {
+        //go kreirame <label> da e .name i go appendTo('body')
+        var label = $("<label>" + data[i].name + "</label>").appendTo('body');
+        var sel = $('<select name='+data[i].name+'>').appendTo('body');
+        //kako da gi staveme opciite
+        //1.zemi go selectot, 2.napraj mu append na option,
+        // 3.setiraj mu value da bide this, 4.setiraj mu text da bide this
+        //value ni treba za servero da znae so e prateno
+        //text e toa so ke ni e vidlivo na nas u <html>.
+        $(data[i].options).each(function() {
+            //console.log(this);-> this e sekoja opvija u nizata: "red"...
+            sel.append($("<option>").attr('value', this).text(this));
+        });
+        sel.change(function () {
+            console.log(this);
+            //console.log(this); e imeto na selectot : name='+data[i].name+' zatoa mora da mu staeme ime
+            //нашиот селект ќе ни го врати неговото име: width, color,background
+            //istiot element najdi koj tekst e selektiran od ponudenite : red, green, 100px..
+            $("p").css($(this).attr('name'), $(this).find(":selected").text());
+        });
+    }
+</script>
+</body>
+</html>
